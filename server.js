@@ -15,11 +15,13 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+const uri = process.env.MONGODB_URI;
+
 // mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true, useFindAndModify: false });
 mongoose.connect(
 
-  process.env.MONGODB_URI || 'mongodb://localhost/trackmyworkout',
-  
+  process.env.MONGODB_URI || 'mongodb://localhost/workout',
+
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
