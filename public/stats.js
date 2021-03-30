@@ -8,11 +8,10 @@ fetch("/api/workouts/range")
     populateChart(data);
   });
 
-
 API.getWorkoutsInRange()
 
-  function generatePalette() {
-    const arr = [
+function generatePalette() {
+  const arr = [
     "#003f5c",
     "#2f4b7c",
     "#665191",
@@ -32,11 +31,12 @@ API.getWorkoutsInRange()
   ]
 
   return arr;
-  }
+}
 function populateChart(data) {
   let durations = duration(data);
   let pounds = calculateTotalWeight(data);
-  let workouts = workoutNames(data);
+  let workouts = workoutNames(data.dataByExercise);
+
   const colors = generatePalette();
 
   let line = document.querySelector("#canvas").getContext("2d");
@@ -61,7 +61,7 @@ function populateChart(data) {
           label: "Workout Duration In Minutes",
           backgroundColor: "red",
           borderColor: "red",
-          data: durations,
+          data: durations.byDay,
           fill: false
         }
       ]
@@ -107,7 +107,7 @@ function populateChart(data) {
       datasets: [
         {
           label: "Pounds",
-          data: pounds,
+          data: pounds.byDay,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
@@ -153,7 +153,7 @@ function populateChart(data) {
         {
           label: "Excercises Performed",
           backgroundColor: colors,
-          data: durations
+          data: durations.byExercise
         }
       ]
     },
@@ -173,7 +173,7 @@ function populateChart(data) {
         {
           label: "Excercises Performed",
           backgroundColor: colors,
-          data: pounds
+          data: pounds.byExercise
         }
       ]
     },
@@ -187,24 +187,42 @@ function populateChart(data) {
 }
 
 function duration(data) {
-  let durations = [];
+  let durations = {
+    byDay: [],
+    byExercise: []
+  };
 
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      durations.push(exercise.duration);
-    });
+  data.dataByDay.forEach(exercise => {
+    // Assign the duration to the corresponding array index that indicates the day of the week
+    // ex. sunday -> durations[0], monday -> durations [1]
+    durations.byDay[exercise._id - 1] = exercise.duration
+  });
+
+  data.dataByExercise.forEach(exercise => {
+    // Assign the duration to the corresponding array index that indicates the day of the week
+    // ex. sunday -> durations[0], monday -> durations [1]
+    durations.byExercise.push(exercise.duration)
   });
 
   return durations;
 }
 
 function calculateTotalWeight(data) {
-  let total = [];
+  let total = {
+    byDay: [],
+    byExercise: []
+  };
 
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      total.push(exercise.weight);
-    });
+  data.dataByDay.forEach(exercise => {
+    // Assign the duration to the corresponding array index that indicates the day of the week
+    // ex. sunday -> durations[0], monday -> durations [1]
+    total.byDay[exercise._id - 1] = exercise.weight
+  });
+
+  data.dataByExercise.forEach(exercise => {
+    // Assign the duration to the corresponding array index that indicates the day of the week
+    // ex. sunday -> durations[0], monday -> durations [1]
+    total.byExercise.push(exercise.weight);
   });
 
   return total;
@@ -213,11 +231,9 @@ function calculateTotalWeight(data) {
 function workoutNames(data) {
   let workouts = [];
 
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      workouts.push(exercise.name);
-    });
+  data.forEach(exercise => {
+    workouts.push(exercise._id);
   });
-  
+
   return workouts;
 }

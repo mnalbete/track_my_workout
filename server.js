@@ -1,27 +1,21 @@
+// Dependencies
 const express = require("express");
 const mongoose = require("mongoose");
-const logger = require("morgan");
 
-require("./models")
-
-const PORT = process.env.PORT || 3000;
+// Express server setup
+const PORT = process.env.PORT || 3000; // Heroku setup
 
 const app = express();
-
-app.use(logger("dev"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Define public folder
 app.use(express.static("public"));
 
-const uri = process.env.MONGODB_URI;
 
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true, useFindAndModify: false });
 mongoose.connect(
-
   process.env.MONGODB_URI || 'mongodb://localhost/workout',
-
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -30,10 +24,11 @@ mongoose.connect(
   }
 );
 
-
-app.use(require("./routes/htmlRoutes"));
+// Define routes folder
 app.use(require("./routes/apiRoutes"));
+app.use(require("./routes/htmlRoutes"));
 
+// Start server
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
 });

@@ -1,6 +1,7 @@
 {
   "name": "mongoose_skeleton",
   "version": "1.0.0",
+  "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,19 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "heroku": "^7.2.0",
-    "mongoose": "^5.12.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.3.16",
     "morgan": "^1.9.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mnalbete/track_my_workout.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mnalbete/track_my_workout/issues"
-  },
-  "homepage": "https://github.com/mnalbete/track_my_workout#readme",
-  "description": ""
+  }
 }
